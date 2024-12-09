@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -14,25 +15,26 @@ app.use(session({
         httpOnly: true,
         maxAge: 1000 * 60 * 30 //minutos para excluir os dados de login
     }
-}))
+}));
+app.use(cookieParser());
+   
 const porta = 3000;
 const host = '0.0.0.0';
 
 var listaUsuarios = [];
 
 function menu(req, resp) {
+    let ultimoLogin = req.cookies['ultimoLogin'];
+
+    if(!ultimoLogin)
+        ultimoLogin = '';
+
     resp.send(` <html lang="pt-br">
                         <head>
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                             <title>Menu</title>
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-                            <style>
-                                body{
-                                    width: 700px;
-                                    margin: auto;
-                                }
-                            </style>
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">                           
                         </head>
                         <body>
                             <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -46,6 +48,9 @@ function menu(req, resp) {
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Bate-papo</a>
+                                            </li>
+                                            <li>
+                                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seu último acesso foi realizado em ${ultimoLogin}</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link active" aria-current="page" href="/login">Sair</a>
@@ -63,11 +68,15 @@ function mostraFormulario(req, resp){
                         <head>
                             <meta charset="UTF-8"/>
                             <title>Cadastro de contato</title>
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
                             <style>
                                 body{
                                     width: 700px;
                                     margin: auto;
+                                }
+                                .botao{
+                                    display: flex;
+                                    justify-content: space-between;
                                 }
                             </style>
                         </head>
@@ -92,11 +101,10 @@ function mostraFormulario(req, resp){
                                     <input type="text" class="form-control" id="nickname" name="nickname">
                                 </div>
 
-                                <div class="col-12">
+                                <div class="botao">
                                     <button class="btn btn-primary" type="submit">Enviar</button>
-                                    
+                                    <p><a class="btn btn-primary" href="/">Menu</a></p>
                                 </div>
-                                <p><a class="btn btn-primary" href="/">Menu</a></p>
                             </form>
                         </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -107,6 +115,11 @@ function cadastrarUsuario(req, resp){
     const nome = req.body.nome;
     const dataNascimento = req.body.dataNascimento;
     const nickname = req.body.nickname;
+
+    const ultimoLogin = req.cookies['ultimoLogin'];
+    
+    if(!ultimoLogin)
+        ultimoLogin = '';
 
     if(nome && dataNascimento && nickname){
         const usuario = {   
@@ -128,8 +141,7 @@ function cadastrarUsuario(req, resp){
                                     <tr>
                                         <th>Nome</th>
                                         <th>Data de Nascimento</th>
-                                        <th>N
-                                        ickname</th>
+                                        <th>Nickname</th>
                                     </tr>
                                 </thead>
                                 <tbody> `);
@@ -168,6 +180,10 @@ function cadastrarUsuario(req, resp){
                                     color: red; 
                                     margin: 0; 
                                     padding: 0 6px;
+                                }                          
+                                .botao{
+                                    display: flex;
+                                    justify-content: space-between;
                                 }
                             </style>
                         </head>
@@ -213,7 +229,7 @@ function cadastrarUsuario(req, resp){
                                 </div>`);
         }
         resp.write  (`          </div> 
-                                <div class="col-12">
+                                <div class="botao">
                                     <button class="btn btn-primary" type="submit">Enviar</button>
                                     <p><a class="btn btn-primary" href="/">Menu</a></p>
                                 </div>
@@ -232,12 +248,12 @@ function autenticarUsuario(req, resp){
 
     if(email === 'elisson@email.com' && senha === '123'){
         req.session.usuarioLogado = true;
-        // resp.cookie('dataHoraUltimoAcesso', new Date().toLocaleDateString(), 
-        //     { 
-        //         maxAge: 1000 * 60 * 60 * 24 * 30, 
-        //         httpOnly: true
-        //     });
-        resp.redirect('/')
+        resp.cookie('ultimoLogin', new Date().toLocaleDateString(), 
+            { 
+                maxAge: 1000 * 60 * 60 * 24 * 30, 
+                httpOnly: true
+            });
+        resp.redirect('/');
     }
     else{
         resp.write(`<html>
