@@ -108,11 +108,10 @@ function cadastrarUsuario(req, resp){
                                     width: 700px; 
                                     margin: auto; 
                                 } 
-                                .alert-container { 
+                                .input-group-custom { 
                                     display: flex; 
-                                    justify-content: space-between; 
-                                    margin: 0 0 10px 0; 
-                                } 
+                                    flex-direction: column;
+                                }
                                 .alert { 
                                     color: red; 
                                     margin: 0; 
@@ -122,45 +121,48 @@ function cadastrarUsuario(req, resp){
                         </head>
                         <body>
                             <h2>Cadastro</h2>
+                            <br>
                             <hr>
                             <form class="row g-3" method="POST" action="/cadastroUsuario">
-                                <div class="col-md-4">
+                                <div class="col-md-4 input-group-custom">
                                     <label class="form-label" for="nome">Nome Completo</label>
                                     <input type="text" class="form-control" id="nome" name="nome" value="${nome}"/>
-                                </div>
+                                
                     `);
         if(!nome) {
-            resp.write  (`      <div class="alert">
-                                   <p>Nome obrigatório</p>
-                                </div>
+            resp.write  (`          <div class="alert">
+                                        <p>Nome obrigatório</p>
+                                    </div>
                         `);
-        }
-            resp.write(`        </div>`);                      
-        resp.write (`           <div class="col-md-4">
+        }                      
+        resp.write (`           </div>     
+                                <div class="col-md-4 input-group-custom">
                                     <label for="email" class="form-label">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="inputGroupPrepend">@</span>
                                         <input type="text" class="form-control" id="email" name="email" aria-describedby="inputGroupPrepend" value="${email}"/>
                                     </div>
-                                </div>
                     `);
         if(!email){
-            resp.write  (`      <div class="alert">
-                                    <p>Email obrigatório</p>
-                                </div> 
+            resp.write  (`          <div class="alert">
+                                        <p>Email obrigatório</p>
+                                    </div> 
                         `);
         }  
-        resp.write (`           <div class="col-md-4">
+    resp.write (`               </div>
+                                <div class="col-md-4 input-group-custom">
                                     <label class="form-label" for="senha">Senha</label>
                                     <input type="password" class="form-control" id="senha" name="senha" value="${senha}"/>
-                                </div>
+                                    
                     `);
         if(!senha){
-            resp.write  (`      <div class="alert">
-                                    <p>Senha obrigatória</p>
-                                </div> `);
+            resp.write  (`          <div class="alert">
+                                        <p>Senha obrigatória</p>
+                                    </div>  
+                                </div>`);
         }
-        resp.write  (`          <div class="col-12">
+        resp.write  (`          </div> 
+                                <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Enviar</button>
                                 </div>
                             </form>
