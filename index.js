@@ -9,8 +9,46 @@ const host = '0.0.0.0';
 
 var listaUsuarios = [];
 
-function mostraFormulario(requisicao, resposta){
-    resposta.send(` <html>
+function menu(req, resp) {
+    resp.send(` <html lang="pt-br">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Menu</title>
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                            <style>
+                                body{
+                                    width: 700px;
+                                    margin: auto;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                                <div class="container-fluid">
+                                    <a class="navbar-brand" href="#">MENU</a>
+                                    
+                                    <div class="collapse navbar-collapse" id="navbarNav">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Cadastro de Usuários</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Bate-papo</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link active" aria-current="page" href="/login">Sair</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>                                                   
+                        </body>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> `);
+}
+
+function mostraFormulario(req, resp){
+    resp.send(` <html>
                         <head>
                             <meta charset="UTF-8"/>
                             <title>Cadastro de contato</title>
@@ -46,7 +84,9 @@ function mostraFormulario(requisicao, resposta){
 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Enviar</button>
+                                    
                                 </div>
+                                <p><a class="btn btn-primary" href="/">Menu</a></p>
                             </form>
                         </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -164,6 +204,7 @@ function cadastrarUsuario(req, resp){
         resp.write  (`          </div> 
                                 <div class="col-12">
                                     <button class="btn btn-primary" type="submit">Enviar</button>
+                                    <p><a class="btn btn-primary" href="/">Menu</a></p>
                                 </div>
                             </form>
                         </body>
@@ -174,13 +215,12 @@ function cadastrarUsuario(req, resp){
     }
 }
 
-app.get('/cadastroUsuario', mostraFormulario);
-app.post('/cadastroUsuario', cadastrarUsuario);
+app.get('/cadastroUsuario', mostraFormulario, menu);
+app.post('/cadastroUsuario', cadastrarUsuario, menu);
 app.get('/login', (req, resp) => {
     resp.redirect('/login.html');
 });
-
-//app.get('/', teste);
+app.get('/', menu);
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
 });
