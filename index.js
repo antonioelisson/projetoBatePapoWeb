@@ -1,9 +1,20 @@
 import express from 'express';
+import session from 'express-session';
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./pages/public'));
+app.use(session({
+    secret: 'M1nh4Chav3S3cr3t4',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 30 //minutos para excluir os dados de login
+    }
+}))
 const porta = 3000;
 const host = '0.0.0.0';
 
@@ -71,15 +82,14 @@ function mostraFormulario(req, resp){
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
                                     <div class="input-group">
-                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                        <input type="text" class="form-control" id="email" name="email" aria-describedby="inputGroupPrepend">
+                                        <input type="date" class="form-control" id="data" name="dataNascimento" aria-describedby="inputGroupPrepend"/>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="senha" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="senha" name="senha">
+                                    <label for="nickname" class="form-label">Nickname</label>
+                                    <input type="text" class="form-control" id="nickname" name="nickname">
                                 </div>
 
                                 <div class="col-12">
@@ -95,14 +105,14 @@ function mostraFormulario(req, resp){
 
 function cadastrarUsuario(req, resp){
     const nome = req.body.nome;
-    const email = req.body.email;
-    const senha = req.body.senha;
+    const dataNascimento = req.body.dataNascimento;
+    const nickname = req.body.nickname;
 
-    if(nome && email && senha){
+    if(nome && dataNascimento && nickname){
         const usuario = {   
                             nome, 
-                            email, 
-                            senha 
+                            dataNascimento, 
+                            nickname 
                         };
         listaUsuarios.push(usuario);
 
@@ -117,21 +127,23 @@ function cadastrarUsuario(req, resp){
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
-                                        <th>Email</th>
-                                        <th>Senha</th>
+                                        <th>Data de Nascimento</th>
+                                        <th>N
+                                        ickname</th>
                                     </tr>
                                 </thead>
                                 <tbody> `);
                                 for(var i = 0; i < listaUsuarios.length; i++){
                                     resp.write(` <tr>
                                                     <td>${listaUsuarios[i].nome}</td>
-                                                    <td>${listaUsuarios[i].email}</td>
-                                                    <td>${listaUsuarios[i].senha}</td>
+                                                    <td>${listaUsuarios[i].dataNascimento}</td>
+                                                    <td>${listaUsuarios[i].nickname}</td>
                                                 </tr> `);
                                 }
         resp.write(            `</tbody>            
                             </table>
                             <p><a class="btn btn-primary" href="/cadastroUsuario">Cadastrar outro usuário</a></p>
+                            <p><a class="btn btn-primary" href="/">Menu</a></p>
                             </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                     </html> `);                       
@@ -177,27 +189,26 @@ function cadastrarUsuario(req, resp){
         }                      
         resp.write (`           </div>     
                                 <div class="col-md-4 input-group-custom">
-                                    <label for="email" class="form-label">Email</label>
+                                    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
                                     <div class="input-group">
-                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                        <input type="text" class="form-control" id="email" name="email" aria-describedby="inputGroupPrepend" value="${email}"/>
+                                        <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" aria-describedby="inputGroupPrepend" value="${dataNascimento}"/>
                                     </div>
                     `);
-        if(!email){
+        if(!dataNascimento){
             resp.write  (`          <div class="alert">
-                                        <p>Email obrigatório</p>
+                                        <p>Data de nascimento obrigatória</p>
                                     </div> 
                         `);
         }  
     resp.write (`               </div>
                                 <div class="col-md-4 input-group-custom">
-                                    <label class="form-label" for="senha">Senha</label>
-                                    <input type="password" class="form-control" id="senha" name="senha" value="${senha}"/>
+                                    <label class="form-label" for="nickname">Nickname</label>
+                                    <input type="text" class="form-control" id="senha" name="nickname" value="${nickname}"/>
                                     
                     `);
-        if(!senha){
+        if(!nickname){
             resp.write  (`          <div class="alert">
-                                        <p>Senha obrigatória</p>
+                                        <p>Nickname obrigatória</p>
                                     </div>  
                                 </div>`);
         }
@@ -215,12 +226,55 @@ function cadastrarUsuario(req, resp){
     }
 }
 
-app.get('/cadastroUsuario', mostraFormulario, menu);
-app.post('/cadastroUsuario', cadastrarUsuario, menu);
+function autenticarUsuario(req, resp){
+    const email = req.body.email;
+    const senha = req.body.senha;
+
+    if(email === 'elisson@email.com' && senha === '123'){
+        req.session.usuarioLogado = true;
+        // resp.cookie('dataHoraUltimoAcesso', new Date().toLocaleDateString(), 
+        //     { 
+        //         maxAge: 1000 * 60 * 60 * 24 * 30, 
+        //         httpOnly: true
+        //     });
+        resp.redirect('/')
+    }
+    else{
+        resp.write(`<html>
+                        <head>
+                            <meta charset="utf-8">
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                        </head>
+                        <body>
+                            <div class="alert alert-danger role="alert">
+                                Usuário ou senha inválidos!
+                            </div>
+                            <div>
+                                <a href="/login.html" class="btn btn-primary">Tentar novamente</a> 
+                            </div>
+                        </body>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+                    </html>
+                `);
+    }
+}
+
+//midleware de segurança
+function verificarAutenticacao(req, resp, next){
+    if(req.session.usuarioLogado)
+        next();//permita acessar os recursos solicitados
+    else
+        resp.redirect("/login.html");
+}
+
+app.post('/login', autenticarUsuario);
+app.get('/cadastroUsuario', verificarAutenticacao, mostraFormulario);
+app.post('/cadastroUsuario', cadastrarUsuario);
 app.get('/login', (req, resp) => {
     resp.redirect('/login.html');
 });
-app.get('/', menu);
+app.get('/', verificarAutenticacao, menu);
+
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
 });
