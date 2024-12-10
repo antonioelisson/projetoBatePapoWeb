@@ -47,7 +47,7 @@ function menu(req, resp) {
                                                 <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Cadastro de Usuários</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Bate-papo</a>
+                                                <a class="nav-link active" aria-current="page" href="/batePapo">Bate-papo</a>
                                             </li>
                                             <li>
                                                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seu último acesso foi realizado em ${ultimoLogin}</a>
@@ -134,6 +134,16 @@ function cadastrarUsuario(req, resp){
                             <meta charset="UTF-8"/>
                             <title>Lista de usuários</title>
                             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                             <style>
+                                body{
+                                    width: 700px;
+                                    margin: auto;
+                                }
+                                .botao{
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
+                            </style>
                         </head>
                         <body>
                             <table class="table table-striped">
@@ -283,13 +293,88 @@ function verificarAutenticacao(req, resp, next){
         resp.redirect("/login.html");
 }
 
-app.post('/login', autenticarUsuario);
-app.get('/cadastroUsuario', verificarAutenticacao, mostraFormulario);
-app.post('/cadastroUsuario', cadastrarUsuario);
+function escreverMensagem(req, resp){
+    resp.write(`<html lang="pt-br">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Mensagens</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">  
+                        <style>
+                            body{
+                                width: 700px;
+                                margin: auto;
+                            }
+                            .botao{
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                        </style>                         
+                    </head>
+                    <body>
+                        <div>
+                            <form  method="POST" action="/batePapo">
+                            Usuários:
+                `);
+                                for(var i = 0; i < listaUsuarios.length; i++){
+                                    resp.write (`<select id="usuarios" name="usuarios">        
+                                                    <option value="">${listaUsuarios[i].nome}</option>
+                                                </select>
+                                            `);
+                                    }
+    resp.write(`            
+                                <label for="msg">Mensagem:</label>
+                                <input id="msg" name="mensagem" placeholder="Escreva uma mensagem..."/>
+                                <button>Enviar</button>
+                            </form>
+                            <p><a class="btn btn-primary" href="/">Menu</a></p>
+                        </div>
+                    </body>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                </html>
+            `);
+     resp.end(); 
+}
+
+function postarMensagem(req, resp){
+    const mensagem = req.body.mensagem;
+    const usuario = req.body.usuarios;
+
+    resp.write(`<html lang="pt-br">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Mensagens</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">  
+                        <style>
+                            body{
+                                width: 700px;
+                                margin: auto;
+                            }
+                            .botao{
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                        </style>                         
+                    </head>
+
+                    <body>
+                        <p>Usuário ${usuario}</p>
+                        <p>Mensagem ${mensagem}</p>
+                    </body>
+                </html> `);
+    resp.end();
+}
+
 app.get('/login', (req, resp) => {
     resp.redirect('/login.html');
 });
-app.get('/', verificarAutenticacao, menu);
+app.post('/login', autenticarUsuario);
+app.get('/cadastroUsuario', mostraFormulario);
+app.post('/cadastroUsuario', cadastrarUsuario);
+app.get('/batePapo', escreverMensagem);
+app.post('/batePapo', postarMensagem);
+app.get('/', menu);
 
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
