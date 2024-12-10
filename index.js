@@ -309,23 +309,58 @@ function escreverMensagem(req, resp){
                                 display: flex;
                                 justify-content: space-between;
                             }
+                                .chat-container { 
+                                width: 100%;
+                                max-width: 600px;
+                                background-color: #fff; 
+                                border: 1px solid #ccc; 
+                                border-radius: 5px; 
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+                                overflow: hidden; 
+                            } 
+                            .messages { 
+                                height: 100dvh; 
+                                overflow-y: auto; 
+                                border-bottom: 1px solid #ccc;
+
+                            }
+                            .messages > p{
+                                padding-left: 10px 0 0 0;
+                                margin: 0;
+                            }
+                            .bottom-div { 
+                                display: flex;
+                                justify-content: space-evenly;
+                                position: fixed;
+                                bottom: 0; 
+                                width: 100%; 
+                                background-color: #00ff4059; 
+                                color: black; 
+                                text-align: center; 
+                                padding: 10px; 
+                            }
                         </style>                         
                     </head>
                     <body>
+                        <div class="chat-container">
+                            <div class="messages">
+                                
+                            <div>
                         <div>
+                        <div class="bottom-div chat-container">
                             <form  method="POST" action="/batePapo">
-                            Usuários:
+                            Usuário: 
+                            <select id="usuarios" name="usuarios"> 
                 `);
                                 for(var i = 0; i < listaUsuarios.length; i++){
-                                    resp.write (`<select id="usuarios" name="usuarios">        
-                                                    <option value="${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>
-                                                </select>
-                                            `);
+                                    resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>
+                                                
+                                                `);
                                     }
-    resp.write(`            
+    resp.write(`            </select>
                                 <label for="msg">Mensagem:</label>
                                 <input id="msg" name="mensagem" placeholder="Escreva uma mensagem..."/>
-                                <button>Enviar</button>
+                                <button class="btn btn-primary">Enviar</button>
                             </form>
                             <p><a class="btn btn-primary" href="/">Menu</a></p>
                         </div>
@@ -339,14 +374,26 @@ function escreverMensagem(req, resp){
 function postarMensagem(req, resp){
     const mensagem = req.body.mensagem;
     const usuarios = req.body.usuarios;
+    var horaPostagem;
 
     let dataPostagem = req.cookies['dataPostagem'];
 
     if(!dataPostagem)
         dataPostagem = '';
 
-    resp.cookie('dataPostagem', new Date().toLocaleDateString());
-
+    resp.cookie('dataPostagem', new Date().toLocaleDateString('pt-BR', {    year: 'numeric',
+                                                                            month: '2-digit', 
+                                                                            day: '2-digit', 
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit' 
+                                                                        }));
+    horaPostagem = new Date().toLocaleDateString('pt-BR', {    
+        year: 'numeric',
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit',
+        minute: '2-digit' 
+    });
     resp.write(`<html lang="pt-br">
                     <head>
                         <meta charset="UTF-8">
@@ -354,22 +401,75 @@ function postarMensagem(req, resp){
                         <title>Mensagens</title>
                         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">  
                         <style>
-                            body{
+                            body {
                                 width: 700px;
                                 margin: auto;
                             }
-                            .botao{
+                            .botao {
                                 display: flex;
                                 justify-content: space-between;
                             }
+                            .chat-container { 
+                                width: 100%;
+                                max-width: 600px;
+                                background-color: #fff; 
+                                border: 1px solid #ccc; 
+                                border-radius: 5px; 
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+                                overflow: hidden; 
+                            } 
+                            .messages { 
+                                height: 100dvh; 
+                                overflow-y: auto; 
+                                border-bottom: 1px solid #ccc;
+
+                            }
+                            .messages > p{
+                                padding-left: 10px 0 0 0;
+                                margin: 0;
+                            }
+                            .bottom-div { 
+                                display: flex;
+                                justify-content: space-evenly;
+                                position: fixed;
+                                bottom: 0; 
+                                width: 100%; 
+                                background-color: #00ff4059; 
+                                color: black; 
+                                text-align: center; 
+                                padding: 10px; 
+                            }
                         </style>                         
                     </head>
-
                     <body>
-                        <p>${usuarios}: ${mensagem}</p>
-                        <p>postado em: ${dataPostagem}</p>    
+                        <div class="chat-container">
+                            <div class="messages">
+                                <p>${usuarios}: <spam style="font-size: 1.2rem">${mensagem}</spam></p>
+                                <p style="color: red;">postado em: ${horaPostagem}</p>
+                            <div>
+                        <div>
+                        <div class="bottom-div chat-container">
+                            <form  method="POST" action="/batePapo">
+                                <div>
+                                    Usuário: 
+                                    <select id="usuarios" name="usuarios"> 
+    `);
+                                    for(var i = 0; i < listaUsuarios.length; i++){
+                                        resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>`);
+                                    }
+    resp.write(`                    </select>
+                                    <label for="msg">Mensagem:</label>
+                                    <input id="msg" name="mensagem" placeholder="Escreva uma mensagem..."/>
+                                    <button class="btn btn-primary">Enviar</button>
+                                </div>
+                            </form>
+                            <p><a class="btn btn-primary" href="/">Menu</a></p>
+                        </div>
+                   
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
                     </body>
-                </html> `);
+                </html> 
+    `);
     resp.end();
 }
 
@@ -381,7 +481,7 @@ app.get('/cadastroUsuario', mostraFormulario);
 app.post('/cadastroUsuario', cadastrarUsuario);
 app.get('/batePapo', escreverMensagem);
 app.post('/batePapo', postarMensagem);
-app.get('/', verificarAutenticacao, menu);
+app.get('/', menu);
 
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
