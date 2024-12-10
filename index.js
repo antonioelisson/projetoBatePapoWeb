@@ -318,7 +318,7 @@ function escreverMensagem(req, resp){
                 `);
                                 for(var i = 0; i < listaUsuarios.length; i++){
                                     resp.write (`<select id="usuarios" name="usuarios">        
-                                                    <option value="">${listaUsuarios[i].nome}</option>
+                                                    <option value="${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>
                                                 </select>
                                             `);
                                     }
@@ -338,7 +338,14 @@ function escreverMensagem(req, resp){
 
 function postarMensagem(req, resp){
     const mensagem = req.body.mensagem;
-    const usuario = req.body.usuarios;
+    const usuarios = req.body.usuarios;
+
+    let dataPostagem = req.cookies['dataPostagem'];
+
+    if(!dataPostagem)
+        dataPostagem = '';
+
+    resp.cookie('dataPostagem', new Date().toLocaleDateString());
 
     resp.write(`<html lang="pt-br">
                     <head>
@@ -359,8 +366,8 @@ function postarMensagem(req, resp){
                     </head>
 
                     <body>
-                        <p>Usuário ${usuario}</p>
-                        <p>Mensagem ${mensagem}</p>
+                        <p>${usuarios}: ${mensagem}</p>
+                        <p>postado em: ${dataPostagem}</p>    
                     </body>
                 </html> `);
     resp.end();
@@ -374,7 +381,7 @@ app.get('/cadastroUsuario', mostraFormulario);
 app.post('/cadastroUsuario', cadastrarUsuario);
 app.get('/batePapo', escreverMensagem);
 app.post('/batePapo', postarMensagem);
-app.get('/', menu);
+app.get('/', verificarAutenticacao, menu);
 
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
