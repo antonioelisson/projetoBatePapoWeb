@@ -455,7 +455,7 @@ app.get('/logout', (req, resp) => {
 app.post('/login', autenticarUsuario);
 app.get('/cadastroUsuario', mostraFormulario);
 app.post('/cadastroUsuario', cadastrarUsuario);
-app.get('/batePapo', verificarAutenticacao, escreverMensagem);
+app.get('/batePapo', escreverMensagem);
 app.post('/batePapo', postarMensagem);
 app.get('/', verificarAutenticacao, menu);
 
