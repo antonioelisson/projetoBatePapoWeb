@@ -53,7 +53,7 @@ function menu(req, resp) {
                                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seu último acesso foi realizado em ${ultimoLogin}</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="/login">Sair</a>
+                                            <a class="nav-link active" aria-current="page" href="/logout">Sair</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -544,12 +544,16 @@ function postarMensagem(req, resp){
 app.get('/login', (req, resp) => {
     resp.redirect('/login.html');
 });
+app.get('/logout', (req, resp) => {
+    req.session.destroy(); //eliminar a sessão.
+    resp.redirect('/login.html');
+});
 app.post('/login', autenticarUsuario);
-app.get('/cadastroUsuario', mostraFormulario);
+app.get('/cadastroUsuario', verificarAutenticacao, mostraFormulario);
 app.post('/cadastroUsuario', cadastrarUsuario);
-app.get('/batePapo', escreverMensagem);
+app.get('/batePapo', verificarAutenticacao, escreverMensagem);
 app.post('/batePapo', postarMensagem);
-app.get('/', menu);
+app.get('/', verificarAutenticacao, menu);
 
 app.listen(porta, host, () => {
     console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
