@@ -317,14 +317,6 @@ function autenticarUsuario(req, resp){
     }
 }
 
-//midleware de segurança
-function verificarAutenticacao(req, resp, next){
-    if(req.session.usuarioLogado)
-        next();//permita acessar os recursos solicitados
-    else
-        resp.redirect("/login.html");
-}
-
 let listaMensagens = []; 
 
 function escreverMensagem(req, resp) {
@@ -445,6 +437,13 @@ function postarMensagem(req, resp) {
     }
 }
 
+//midleware de segurança
+function verificarAutenticacao(req, resp, next){
+    if(req.session.usuarioLogado)
+        next();//permita acessar os recursos solicitados
+    else
+        resp.redirect("/login.html");
+}
 app.get('/login', (req, resp) => {
     resp.redirect('/login.html');
 });
