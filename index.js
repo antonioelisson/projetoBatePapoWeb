@@ -6,14 +6,14 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./pages/public'));
-app.use(session({
+app.use(session( {
     secret: 'M1nh4Chav3S3cr3t4',
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false,
-        httpOnly: true,
-        maxAge: 1000 * 60 * 30 //minutos para excluir os dados de login
+                secure: false,
+                httpOnly: true,
+                maxAge: 1000 * 60 * 30 //minutos para excluir os dados de login
     }
 }));
 app.use(cookieParser());
@@ -30,107 +30,109 @@ function menu(req, resp) {
         ultimoLogin = '';
 
     resp.send(` <html lang="pt-br">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Menu</title>
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">                           
-                        </head>
-                        <body>
-                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                                <div class="container-fluid">
-                                    <a class="navbar-brand" href="#">MENU</a>
-                                    
-                                    <div class="collapse navbar-collapse" id="navbarNav">
-                                        <ul class="navbar-nav">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Cadastro de Usuários</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" aria-current="page" href="/batePapo">Bate-papo</a>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seu último acesso foi realizado em ${ultimoLogin}</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link active" aria-current="page" href="/login">Sair</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Menu</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">                           
+                    </head>
+                    <body>
+                        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                            <div class="container-fluid">
+                                <a class="navbar-brand" href="#">MENU</a>
+                                <div class="collapse navbar-collapse" id="navbarNav">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="/cadastroUsuario">Cadastro de Usuários</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="/batePapo">Bate-papo</a>
+                                        </li>
+                                        <li>
+                                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seu último acesso foi realizado em ${ultimoLogin}</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="/login">Sair</a>
+                                        </li>
+                                    </ul>
                                 </div>
-                            </nav>                                                   
-                        </body>
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> `);
+                            </div>
+                        </nav>                                                   
+                    </body>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> 
+    `);
 }
 
-function mostraFormulario(req, resp){
+function mostraFormulario(req, resp) {
     resp.send(` <html>
-                        <head>
-                            <meta charset="UTF-8"/>
-                            <title>Cadastro de contato</title>
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-                            <style>
-                                body{
-                                    width: 700px;
-                                    margin: auto;
-                                }
-                                .botao{
-                                    display: flex;
-                                    justify-content: space-between;
-                                }
-                                button{
-                                    margin-top: 0;
-                                    margin-bottom: 1rem;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <h2>Cadastro</h2></br>
-                            <hr>
-                            <form class="row g-3" method="POST" action="/cadastroUsuario" >
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <title>Cadastro de contato</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+                        <style>
+                            body{
+                                width: 700px;
+                                margin: auto;
+                            }
+                            .botao{
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                            button{
+                                margin-top: 0;
+                                margin-bottom: 1rem;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>Cadastro</h2></br>
+                        <hr>
+                        <form class="row g-3" method="POST" action="/cadastroUsuario" >
 
-                                <div class="col-md-4">
-                                    <label for="nome" class="form-label">Nome completo</label>
-                                    <input type="text" class="form-control" id="nome" name="nome">
-                                </div>
+                            <div class="col-md-4">
+                                <label for="nome" class="form-label">Nome completo</label>
+                                <input type="text" class="form-control" id="nome" name="nome">
+                            </div>
 
-                                <div class="col-md-4">
-                                    <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-                                    <div class="input-group">
-                                        <input type="date" class="form-control" id="data" name="dataNascimento" aria-describedby="inputGroupPrepend"/>
-                                    </div>
+                            <div class="col-md-4">
+                                <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="data" name="dataNascimento" aria-describedby="inputGroupPrepend"/>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="nickname" class="form-label">Nickname</label>
-                                    <input type="text" class="form-control" id="nickname" name="nickname">
-                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="nickname" class="form-label">Nickname</label>
+                                <input type="text" class="form-control" id="nickname" name="nickname">
+                            </div>
 
-                                <div class="botao">
-                                    <button class="btn btn-success" type="submit">Enviar</button>
-                                    <p><a class="btn btn-primary" href="/">Menu</a></p>
-                                </div>
-                            </form>
-                        </body>
-                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-                    </html> `);
+                            <div class="botao">
+                                <button class="btn btn-success" type="submit">Enviar</button>
+                                <p><a class="btn btn-primary" href="/">Menu</a></p>
+                            </div>
+                        </form>
+                    </body>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                </html>
+    `);
 }
 
-function cadastrarUsuario(req, resp){
+function cadastrarUsuario(req, resp) {
     const nome = req.body.nome;
     const dataNascimento = req.body.dataNascimento;
     const nickname = req.body.nickname;
 
-    const ultimoLogin = req.cookies['ultimoLogin'];
+    const ultimoLogin = req.cookies ['ultimoLogin'];
     
     if(!ultimoLogin)
         ultimoLogin = '';
 
-    if(nome && dataNascimento && nickname){
+    if(nome && dataNascimento && nickname) {
         const usuario = {   
                             nome, 
                             dataNascimento, 
                             nickname 
-                        };
+        };
+
         listaUsuarios.push(usuario);
 
         resp.write(` <html>
@@ -158,15 +160,17 @@ function cadastrarUsuario(req, resp){
                                         <th>Nickname</th>
                                     </tr>
                                 </thead>
-                                <tbody> `);
-                                for(var i = 0; i < listaUsuarios.length; i++){
-                                    resp.write(` <tr>
-                                                    <td>${listaUsuarios[i].nome}</td>
-                                                    <td>${listaUsuarios[i].dataNascimento}</td>
-                                                    <td>${listaUsuarios[i].nickname}</td>
-                                                </tr> `);
-                                }
-        resp.write(            `</tbody>            
+                                <tbody> 
+        `);
+                    for(var i = 0; i < listaUsuarios.length; i++){
+                        resp.write(` <tr>
+                                        <td>${listaUsuarios[i].nome}</td>
+                                        <td>${listaUsuarios[i].dataNascimento}</td>
+                                        <td>${listaUsuarios[i].nickname}</td>
+                                    </tr> 
+                        `);
+                    }
+        resp.write(`           </tbody>            
                             </table>
                             <div class="botao">
                                 <p><a class="btn btn-success" href="/cadastroUsuario">Cadastrar outro usuário</a></p>
@@ -174,9 +178,10 @@ function cadastrarUsuario(req, resp){
                             </div>
                             </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-                    </html> `);                       
+                    </html> 
+        `);                       
     }
-    else{
+    else {
         resp.write(` <html lang="pt-br">
                         <head>
                             <meta charset="UTF-8">
@@ -216,12 +221,12 @@ function cadastrarUsuario(req, resp){
                                     <label class="form-label" for="nome">Nome Completo</label>
                                     <input type="text" class="form-control" id="nome" name="nome" value="${nome}"/>
                                 
-                    `);
+        `);
         if(!nome) {
             resp.write  (`          <div class="alert">
                                         <p>Nome obrigatório</p>
                                     </div>
-                        `);
+            `);
         }                      
         resp.write (`           </div>     
                                 <div class="col-md-4 input-group-custom">
@@ -229,24 +234,25 @@ function cadastrarUsuario(req, resp){
                                     <div class="input-group">
                                         <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" aria-describedby="inputGroupPrepend" value="${dataNascimento}"/>
                                     </div>
-                    `);
+        `);
         if(!dataNascimento){
             resp.write  (`          <div class="alert">
                                         <p>Data de nascimento obrigatória</p>
                                     </div> 
-                        `);
+            `);
         }  
     resp.write (`               </div>
                                 <div class="col-md-4 input-group-custom">
                                     <label class="form-label" for="nickname">Nickname</label>
                                     <input type="text" class="form-control" id="senha" name="nickname" value="${nickname}"/>
                                     
-                    `);
+        `);
         if(!nickname){
             resp.write  (`          <div class="alert">
                                         <p>Nickname obrigatória</p>
                                     </div>  
-                                </div>`);
+                                </div>
+            `);
         }
         resp.write  (`          </div> 
                                 <div class="botao">
@@ -257,7 +263,7 @@ function cadastrarUsuario(req, resp){
                         </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
                     </html> 
-                    `);
+        `);
         resp.end();
     }
 }
@@ -268,11 +274,12 @@ function autenticarUsuario(req, resp){
 
     if(email === 'elisson@email.com' && senha === '123'){
         req.session.usuarioLogado = true;
-        resp.cookie('ultimoLogin', new Date().toLocaleDateString(), 
-            { 
-                maxAge: 1000 * 60 * 60 * 24 * 30, 
-                httpOnly: true
-            });
+
+        resp.cookie('ultimoLogin', new Date().toLocaleDateString(),{ 
+            maxAge: 1000 * 60 * 60 * 24 * 30, 
+            httpOnly: true
+        }
+        );
         resp.redirect('/');
     }
     else{
@@ -305,7 +312,7 @@ function autenticarUsuario(req, resp){
                         </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
                     </html>
-                `);
+        `);
     }
 }
 
@@ -375,12 +382,10 @@ function escreverMensagem(req, resp){
                             <form  method="POST" action="/batePapo">
                             Usuário: 
                             <select id="usuarios" name="usuarios"> 
-                `);
-                                for(var i = 0; i < listaUsuarios.length; i++){
-                                    resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>
-                                                
-                                                `);
-                                    }
+    `);
+                for(var i = 0; i < listaUsuarios.length; i++){
+                    resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>`);
+                }
     resp.write(`            </select>
                                 <label for="msg">Mensagem:</label>
                                 <input id="msg" name="mensagem" placeholder="Escreva uma mensagem..."/>
@@ -391,8 +396,8 @@ function escreverMensagem(req, resp){
                     </body>
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
                 </html>
-            `);
-     resp.end(); 
+    `);
+    resp.end(); 
 }
 
 function postarMensagem(req, resp){
@@ -405,12 +410,14 @@ function postarMensagem(req, resp){
     if(!dataPostagem)
         dataPostagem = '';
 
-    resp.cookie('dataPostagem', new Date().toLocaleDateString('pt-BR', {    year: 'numeric',
-                                                                            month: '2-digit', 
-                                                                            day: '2-digit', 
-                                                                            hour: '2-digit',
-                                                                            minute: '2-digit' 
-                                                                        }));
+    resp.cookie('dataPostagem', new Date().toLocaleDateString('pt-BR', {    
+        year: 'numeric',
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit',
+        minute: '2-digit' 
+    }));
+
     horaPostagem = new Date().toLocaleDateString('pt-BR', {    
         year: 'numeric',
         month: '2-digit', 
@@ -418,6 +425,7 @@ function postarMensagem(req, resp){
         hour: '2-digit',
         minute: '2-digit' 
     });
+
     resp.write(`<html lang="pt-br">
                     <head>
                         <meta charset="UTF-8">
@@ -478,9 +486,9 @@ function postarMensagem(req, resp){
                                     Usuário: 
                                     <select id="usuarios" name="usuarios"> 
     `);
-                                    for(var i = 0; i < listaUsuarios.length; i++){
-                                        resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>`);
-                                    }
+                        for(var i = 0; i < listaUsuarios.length; i++){
+                            resp.write (`<option value=" ${listaUsuarios[i].nome}">${listaUsuarios[i].nome}</option>`);
+                        }
     resp.write(`                    </select>
                                     <label for="msg">Mensagem:</label>
                                     <input id="msg" name="mensagem" placeholder="Escreva uma mensagem..."/>
