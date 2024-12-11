@@ -440,10 +440,7 @@ function postarMensagem(req, resp) {
         `);  
         resp.end();
     } else {
-        // Armazena a mensagem no array
         listaMensagens.push({ usuario, mensagem, hora: horaPostagem });
-
-        // Recarrega a página com a nova mensagem
         escreverMensagem(req, resp);
     }
 }
@@ -456,7 +453,7 @@ app.get('/logout', (req, resp) => {
     resp.redirect('/login.html');
 });
 app.post('/login', autenticarUsuario);
-app.get('/cadastroUsuario', verificarAutenticacao, mostraFormulario);
+app.get('/cadastroUsuario', mostraFormulario);
 app.post('/cadastroUsuario', cadastrarUsuario);
 app.get('/batePapo', verificarAutenticacao, escreverMensagem);
 app.post('/batePapo', postarMensagem);
