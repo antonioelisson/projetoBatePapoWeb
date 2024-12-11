@@ -78,6 +78,10 @@ function mostraFormulario(req, resp){
                                     display: flex;
                                     justify-content: space-between;
                                 }
+                                button{
+                                    margin-top: 0;
+                                    margin-bottom: 1rem;
+                                }
                             </style>
                         </head>
                         <body>
@@ -102,7 +106,7 @@ function mostraFormulario(req, resp){
                                 </div>
 
                                 <div class="botao">
-                                    <button class="btn btn-primary" type="submit">Enviar</button>
+                                    <button class="btn btn-success" type="submit">Enviar</button>
                                     <p><a class="btn btn-primary" href="/">Menu</a></p>
                                 </div>
                             </form>
@@ -164,8 +168,10 @@ function cadastrarUsuario(req, resp){
                                 }
         resp.write(            `</tbody>            
                             </table>
-                            <p><a class="btn btn-primary" href="/cadastroUsuario">Cadastrar outro usuário</a></p>
-                            <p><a class="btn btn-primary" href="/">Menu</a></p>
+                            <div class="botao">
+                                <p><a class="btn btn-success" href="/cadastroUsuario">Cadastrar outro usuário</a></p>
+                                <p><a class="btn btn-primary" href="/">Menu</a></p>
+                            </div>
                             </body>
                         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                     </html> `);                       
@@ -194,6 +200,10 @@ function cadastrarUsuario(req, resp){
                                 .botao{
                                     display: flex;
                                     justify-content: space-between;
+                                }
+                                button{
+                                    margin-top: 0;
+                                    margin-bottom: 1rem;
                                 }
                             </style>
                         </head>
@@ -240,7 +250,7 @@ function cadastrarUsuario(req, resp){
         }
         resp.write  (`          </div> 
                                 <div class="botao">
-                                    <button class="btn btn-primary" type="submit">Enviar</button>
+                                    <button class="btn btn-success" type="submit">Enviar</button>
                                     <p><a class="btn btn-primary" href="/">Menu</a></p>
                                 </div>
                             </form>
@@ -270,6 +280,20 @@ function autenticarUsuario(req, resp){
                         <head>
                             <meta charset="utf-8">
                             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                            <style>
+                                body{
+                                    width: 700px;
+                                    margin: auto;
+                                }
+                                .botao{
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
+                                button{
+                                    margin-top: 0;
+                                    margin-bottom: 1rem;
+                                }
+                            </style>
                         </head>
                         <body>
                             <div class="alert alert-danger role="alert">
