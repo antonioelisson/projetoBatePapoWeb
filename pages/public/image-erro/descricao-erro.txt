@@ -1,0 +1,1 @@
+Quando o site de chat foi postado, começou a aparecer a mensagem da foto e acredito que isso está interferindo no cadastro de usuário. Não está gravando mais de um usuário. Já localmente está funcionando como pede a tarefa.
