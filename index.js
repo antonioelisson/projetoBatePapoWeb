@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import path from "path";
 
 const app = express();
 
@@ -272,7 +273,7 @@ function autenticarUsuario(req, resp){
     const email = req.body.email;
     const senha = req.body.senha;
 
-    if(email === 'elisson@email.com' && senha === '123'){
+    if(email === 'admin@email.com' && senha === '123'){
         req.session.usuarioLogado = true;
 
         resp.cookie('ultimoLogin', new Date().toLocaleDateString(),{ 
@@ -406,7 +407,36 @@ function postarMensagem(req, resp){
     var horaPostagem;
 
     if(!mensagem && usuarios){
-        resp.write  (`<p style="color: red"><bold>Preencha todos os campos</bold></p>`);
+        resp.write  (`<html>
+                        <head>
+                            <meta charset="utf-8">
+                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                            <style>
+                                body{
+                                    width: 700px;
+                                    margin: auto;
+                                }
+                                .botao{
+                                    display: flex;
+                                    justify-content: space-between;
+                                }
+                                button{
+                                    margin-top: 0;
+                                    margin-bottom: 1rem;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="alert alert-danger role="alert">
+                                Preencha todos os campos
+                            </div>
+                            <div>
+                                <a href="/batePapo" class="btn btn-primary">Tentar novamente</a> 
+                            </div>
+                        </body>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+                    </html>
+        `);  
         resp.end();
     }else {
 
